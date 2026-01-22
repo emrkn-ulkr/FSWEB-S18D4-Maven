@@ -2,6 +2,7 @@ package com.workintech.s18d1.dao;
 
 import com.workintech.s18d1.entity.BreadType;
 import com.workintech.s18d1.entity.Burger;
+import com.workintech.s18d1.exceptions.BurgerException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -28,8 +29,13 @@ public class BurgerDaoImpl implements BurgerDao {
     }
 
     @Override
-    public Burger findById(int id) {
-        return entityManager.find(Burger.class, id);
+    public Burger findById(long id) {
+        Burger burger = entityManager.find(Burger.class, id);
+
+        if (burger == null) {
+            throw new BurgerException("Burger not found with id: " + id, org.springframework.http.HttpStatus.NOT_FOUND);
+        }
+        return burger;
     }
 
     @Override
@@ -41,11 +47,11 @@ public class BurgerDaoImpl implements BurgerDao {
     }
 
     @Override
-    public List<Burger> findByPrice(double price) {
+    public List<Burger> findByPrice(int price) {
         TypedQuery<Burger> query = entityManager.createQuery(
-                "SELECT b FROM Burger b WHERE b.price> :price ORDER BY b.price DESC",
+                "SELECT b FROM Burger b WHERE b.price > :price ORDER BY b.price DESC",
                 Burger.class);
-        query.setParameter("price",price);
+        query.setParameter("price", (double) price);
         return query.getResultList();
     }
 
@@ -73,8 +79,9 @@ public class BurgerDaoImpl implements BurgerDao {
 return entityManager.merge(burger);
     }
 
+    @Transactional
     @Override
-    public Burger remove(int id) {
+    public Burger remove(long id) {
         Burger burger = findById(id);
         entityManager.remove(burger);
         return burger;

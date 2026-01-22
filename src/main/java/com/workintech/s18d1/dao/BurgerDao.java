@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface BurgerDao {
     Burger save(Burger burger);
-    Burger findById(int id);
+    Burger findById(long id);
     List<Burger> findAll();
-    List<Burger> findByPrice(double price);
+    List<Burger> findByPrice(int price);
     List<Burger> findByBreadType(BreadType breadType);
     List<Burger> findByContent(String content);
     Burger update(Burger burger);
-    Burger remove(int id);
+    Burger remove(long id);
 }

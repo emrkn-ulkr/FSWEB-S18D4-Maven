@@ -19,10 +19,10 @@ public class Burger {
     private String name;
 
     @Column(name = "price")
-    private double price;
+    private Double price;
 
     @Column(name = "is_vegan")
-    private boolean isVegan;
+    private Boolean isVegan;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "bread_type")

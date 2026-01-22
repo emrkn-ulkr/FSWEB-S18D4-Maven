@@ -3,13 +3,15 @@ package com.workintech.s18d1.controller;
 import com.workintech.s18d1.dao.BurgerDao;
 import com.workintech.s18d1.entity.BreadType;
 import com.workintech.s18d1.entity.Burger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("workintech/burgers")
+@RequestMapping("/burgers")
+@Slf4j
 public class BurgerController {
 
     private final BurgerDao burgerDao;
@@ -25,24 +27,25 @@ public class BurgerController {
     }
 
     @GetMapping("{id}")
-    public Burger findById(@PathVariable int id){
+    public Burger findById(@PathVariable long id){
         return burgerDao.findById(id);
     }
 
     @PutMapping("/{id}")
-    public Burger update(@PathVariable int id,@RequestBody Burger burger){
+    public Burger update(@PathVariable long id,@RequestBody Burger burger){
         burger.setId(id);
         return burgerDao.save(burger);
     }
 
     @DeleteMapping("/{id}")
-    public Burger remove(@PathVariable int id){
+    public Burger remove(@PathVariable long id){
         return burgerDao.remove(id);
     }
 
-    @GetMapping("/findByPrice")
-    public List<Burger> findByPrice(@RequestBody Double price){
-return burgerDao.findByPrice(price);
+
+    @GetMapping("/price/{price}")
+    public List<Burger> findByPrice(@PathVariable int price) {
+        return burgerDao.findByPrice(price);
     }
 
     @GetMapping("/findByBreadType")
